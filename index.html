@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="ko">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -9,13 +9,529 @@
     <meta property="og:description" content="다양한 장애물을 피하고 점프와 슬라이딩으로 질주하는 흥미진진한 2D 러닝 액션 게임입니다." />
     <meta property="og:type" content="website" />
     <meta name="twitter:card" content="summary_large_image" />
+
+    <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+
+    <!-- Tailwind CSS CDN (GitHub Pages Zero-Build Static Ready) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              sans: ['"Plus Jakarta Sans"', 'system-ui', 'sans-serif'],
+              mono: ['"JetBrains Mono"', 'monospace'],
+            },
+            colors: {
+              slate: {
+                850: '#151f32',
+              }
+            }
+          }
+        }
+      }
+    </script>
+    <style>
+      body {
+        font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+        background-color: #030712;
+        color: #f3f4f6;
+        user-select: none;
+        -webkit-user-select: none;
+        overflow-x: hidden;
+        touch-action: manipulation;
+      }
+      @keyframes fadeIn {
+        from { opacity: 0; transform: scale(0.96); }
+        to { opacity: 1; transform: scale(1); }
+      }
+      .animate-fade-in {
+        animation: fadeIn 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+      }
+    </style>
   </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.tsx"></script>
+  <body class="min-h-screen bg-[#030712] text-slate-100 flex flex-col selection:bg-cyan-500/30 selection:text-cyan-200">
+    <!-- TOP BAR (Zone 1, Zone 2, Zone 3) -->
+    <header class="w-full border-b border-slate-800/80 bg-slate-950/80 backdrop-blur-md sticky top-0 z-40">
+      <div class="max-w-6xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between gap-8">
+        <!-- Zone 1: Wordmark -->
+        <a href="./" class="text-lg font-extrabold tracking-tight text-white whitespace-nowrap shrink-0 flex items-center gap-2 hover:opacity-90 transition-opacity">
+          <div class="w-7 h-7 rounded-lg bg-gradient-to-tr from-cyan-600 to-cyan-400 flex items-center justify-center text-slate-950 font-black text-sm shadow-md shadow-cyan-500/20">
+            ⚡
+          </div>
+          <span>네온 러너</span>
+        </a>
+
+        <!-- Zone 2: Navigation Links -->
+        <nav class="hidden md:flex items-center gap-6 text-sm font-medium text-slate-400">
+          <button class="btn-open-howto hover:text-cyan-400 transition-colors whitespace-nowrap shrink-0 flex items-center gap-1.5 cursor-pointer">
+            <span>❓</span>
+            <span>플레이 방법</span>
+          </button>
+          <button class="btn-open-shop hover:text-amber-400 transition-colors whitespace-nowrap shrink-0 flex items-center gap-1.5 cursor-pointer">
+            <span>🛒</span>
+            <span>러너 상점</span>
+          </button>
+          <button class="btn-open-records hover:text-purple-400 transition-colors whitespace-nowrap shrink-0 flex items-center gap-1.5 cursor-pointer">
+            <span>🏆</span>
+            <span>명예의 전당</span>
+          </button>
+          <button id="btnMusicToggle" class="hover:text-white transition-colors whitespace-nowrap shrink-0 flex items-center gap-1.5 cursor-pointer text-slate-500">
+            <span>🎵</span>
+            <span id="musicStatus">BGM 끄기</span>
+          </button>
+        </nav>
+
+        <!-- Zone 3: CTA & Currency -->
+        <div class="flex items-center gap-3 shrink-0">
+          <div class="flex items-center gap-1.5 px-3 py-1.5 bg-slate-900 border border-slate-800 rounded-lg text-amber-400 text-xs font-mono font-bold">
+            <span>🪙</span>
+            <span id="topCoins">0</span>
+          </div>
+          <button class="btn-open-shop px-4 py-2 text-xs font-bold text-slate-950 bg-cyan-400 hover:bg-cyan-300 rounded-lg shadow-sm shadow-cyan-500/30 transition-all cursor-pointer whitespace-nowrap shrink-0">
+            상점 & 강화
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <!-- MAIN GAME VIEWPORT -->
+    <main class="flex-1 max-w-6xl w-full mx-auto px-4 sm:px-6 py-6 flex flex-col items-center">
+      <!-- Sub-toolbar: Difficulty & Equipped Character info -->
+      <div class="w-full max-w-5xl mb-4 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs">
+        <!-- Difficulty Segmented Buttons -->
+        <div class="flex items-center gap-1 p-1 bg-slate-900/90 border border-slate-800 rounded-xl">
+          <button data-diff="easy" class="btn-diff px-3 py-1.5 font-semibold rounded-lg transition-colors flex items-center gap-1.5 cursor-pointer whitespace-nowrap text-slate-400 hover:text-white">
+            <span>⚡</span>
+            <span>쉬움 (Easy)</span>
+          </button>
+          <button data-diff="normal" class="btn-diff px-3 py-1.5 font-semibold rounded-lg transition-colors flex items-center gap-1.5 cursor-pointer whitespace-nowrap bg-cyan-500/20 text-cyan-300 border border-cyan-500/40 shadow-sm">
+            <span>⚡</span>
+            <span>보통 (Normal)</span>
+          </button>
+          <button data-diff="hard" class="btn-diff px-3 py-1.5 font-semibold rounded-lg transition-colors flex items-center gap-1.5 cursor-pointer whitespace-nowrap text-slate-400 hover:text-white">
+            <span>🔥</span>
+            <span>매운맛 (Hard)</span>
+          </button>
+        </div>
+
+        <!-- Active Skin Badge & Best Score -->
+        <div class="flex items-center gap-4 text-slate-400">
+          <div class="flex items-center gap-2">
+            <span>장착 러너:</span>
+            <button class="btn-open-shop font-bold text-white hover:text-cyan-400 flex items-center gap-1.5 px-2.5 py-1 bg-slate-900 border border-slate-800 rounded-lg cursor-pointer transition-colors">
+              <span id="activeSkinDot" class="w-2.5 h-2.5 rounded-full bg-cyan-400"></span>
+              <span id="activeSkinName">네온 스트라이커</span>
+              <span class="text-slate-500 text-xs">›</span>
+            </button>
+          </div>
+
+          <div class="flex items-center gap-1.5">
+            <span>최고 기록:</span>
+            <span id="bestScore" class="font-mono font-bold text-cyan-400 tabular-nums">0점</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Canvas Wrapper -->
+      <div class="relative w-full max-w-5xl mx-auto select-none">
+        <div class="relative w-full aspect-[16/9] bg-slate-950 rounded-2xl overflow-hidden border border-slate-800 shadow-2xl shadow-cyan-950/20">
+          <canvas id="gameCanvas" width="960" height="540" class="w-full h-full block cursor-pointer"></canvas>
+
+          <!-- Top HUD Overlay (During playing/pause) -->
+          <div id="hudTop" class="hidden absolute top-4 left-4 right-4 flex items-center justify-between pointer-events-none">
+            <div class="flex items-center gap-6 bg-slate-900/80 backdrop-blur-md px-4 py-2 rounded-xl border border-slate-800/80 text-xs">
+              <div class="flex flex-col">
+                <span class="text-slate-400 font-medium">점수</span>
+                <span id="hudScore" class="text-lg font-bold font-mono tabular-nums text-white">0</span>
+              </div>
+              <div class="w-px h-6 bg-slate-800"></div>
+              <div class="flex flex-col">
+                <span class="text-slate-400 font-medium">거리</span>
+                <span id="hudDistance" class="text-lg font-bold font-mono tabular-nums text-cyan-400">0m</span>
+              </div>
+              <div class="w-px h-6 bg-slate-800"></div>
+              <div class="flex flex-col">
+                <span class="text-slate-400 font-medium">코인</span>
+                <span class="text-lg font-bold font-mono tabular-nums text-amber-400 flex items-center gap-1">
+                  <span>🪙</span>
+                  <span id="hudCoins">0</span>
+                </span>
+              </div>
+            </div>
+
+            <!-- Active Powerup Badges -->
+            <div id="activePowerupsList" class="flex items-center gap-2"></div>
+
+            <!-- Audio & Pause Controls -->
+            <div class="flex items-center gap-2 pointer-events-auto">
+              <button id="btnMute" class="p-2.5 bg-slate-900/80 hover:bg-slate-800 text-slate-300 hover:text-white rounded-xl border border-slate-800 transition-colors cursor-pointer text-sm" title="음소거 토글">
+                🔊
+              </button>
+              <button id="btnPause" class="p-2.5 bg-slate-900/80 hover:bg-slate-800 text-slate-300 hover:text-white rounded-xl border border-slate-800 transition-colors cursor-pointer text-sm" title="일시 정지">
+                ⏸
+              </button>
+            </div>
+          </div>
+
+          <!-- OVERLAY: Title Menu -->
+          <div id="titleMenu" class="absolute inset-0 bg-slate-950/75 backdrop-blur-sm flex flex-col items-center justify-center p-6 text-center">
+            <div class="inline-flex items-center gap-2 px-3 py-1 bg-cyan-950/50 border border-cyan-800/50 rounded-full text-cyan-400 text-xs font-medium mb-3">
+              <span>✨</span>
+              <span>네온 러너 2D 어드벤처</span>
+            </div>
+
+            <h1 class="text-4xl md:text-5xl font-extrabold tracking-tight text-white mb-2">
+              NEON RUNNER
+            </h1>
+            <p class="text-slate-300 text-sm max-w-md mb-6">
+              점프와 슬라이딩으로 다가오는 장애물을 피하고 코인을 모으세요!
+            </p>
+
+            <div class="flex flex-col sm:flex-row items-center gap-3 mb-8">
+              <button id="btnStartGame" class="px-8 py-3.5 bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold rounded-xl shadow-lg shadow-cyan-500/25 transition-all transform hover:scale-105 active:scale-95 flex items-center gap-2 cursor-pointer">
+                <span>▶</span>
+                <span>게임 시작</span>
+              </button>
+              <button class="btn-open-shop px-6 py-3.5 bg-slate-800 hover:bg-slate-700 text-white font-medium rounded-xl border border-slate-700 transition-colors flex items-center gap-2 cursor-pointer">
+                <span>🛒</span>
+                <span>업그레이드 & 캐릭터</span>
+              </button>
+            </div>
+
+            <!-- Quick Controls Helper -->
+            <div class="grid grid-cols-2 gap-4 max-w-sm text-left bg-slate-900/80 p-3.5 rounded-xl border border-slate-800 text-xs text-slate-300">
+              <div class="flex items-center gap-2.5">
+                <div class="w-7 h-7 rounded-lg bg-slate-800 border border-slate-700 flex items-center justify-center text-cyan-400 font-bold">
+                  ↑
+                </div>
+                <div>
+                  <div class="font-semibold text-white">점프 / 2단 점프</div>
+                  <div class="text-slate-400 text-[11px]">Space 또는 W 키</div>
+                </div>
+              </div>
+              <div class="flex items-center gap-2.5">
+                <div class="w-7 h-7 rounded-lg bg-slate-800 border border-slate-700 flex items-center justify-center text-amber-400 font-bold">
+                  ↓
+                </div>
+                <div>
+                  <div class="font-semibold text-white">슬라이딩</div>
+                  <div class="text-slate-400 text-[11px]">S 키 (공중 레이저 통과)</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- OVERLAY: Pause -->
+          <div id="pauseOverlay" class="hidden absolute inset-0 bg-slate-950/80 backdrop-blur-md flex flex-col items-center justify-center p-6 text-center">
+            <h2 class="text-3xl font-extrabold text-white mb-2">일시 정지</h2>
+            <p class="text-slate-400 text-sm mb-6">게임을 계속 진행하려면 버튼을 누르세요.</p>
+            <div class="flex items-center gap-3">
+              <button id="btnResume" class="px-6 py-3 bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold rounded-xl transition-colors cursor-pointer flex items-center gap-2">
+                <span>▶</span>
+                <span>계속하기</span>
+              </button>
+              <button id="btnPauseRestart" class="px-6 py-3 bg-slate-800 hover:bg-slate-700 text-white font-medium rounded-xl border border-slate-700 transition-colors cursor-pointer flex items-center gap-2">
+                <span>🔄</span>
+                <span>다시 시작</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- OVERLAY: Game Over -->
+          <div id="gameOverOverlay" class="hidden absolute inset-0 bg-slate-950/85 backdrop-blur-md flex flex-col items-center justify-center p-6 text-center animate-fade-in">
+            <div id="highScoreBadge" class="hidden px-4 py-1.5 bg-amber-500/20 border border-amber-500/40 text-amber-300 font-bold text-xs rounded-full mb-3 animate-bounce">
+              🎉 신기록 달성! NEW HIGH SCORE!
+            </div>
+
+            <h2 class="text-3xl md:text-4xl font-extrabold text-red-400 mb-1">GAME OVER</h2>
+            <p class="text-slate-400 text-xs mb-6">장애물에 충돌했습니다!</p>
+
+            <div class="grid grid-cols-3 gap-3 w-full max-w-md bg-slate-900/90 border border-slate-800 rounded-xl p-4 mb-6">
+              <div class="flex flex-col items-center">
+                <span class="text-slate-400 text-xs">최종 점수</span>
+                <span id="goScore" class="text-2xl font-bold font-mono text-white tabular-nums">0</span>
+              </div>
+              <div class="flex flex-col items-center border-x border-slate-800">
+                <span class="text-slate-400 text-xs">달린 거리</span>
+                <span id="goDistance" class="text-2xl font-bold font-mono text-cyan-400 tabular-nums">0m</span>
+              </div>
+              <div class="flex flex-col items-center">
+                <span class="text-slate-400 text-xs">획득 코인</span>
+                <span class="text-2xl font-bold font-mono text-amber-400 tabular-nums flex items-center gap-1">
+                  <span>🪙</span>
+                  <span id="goCoins">+0</span>
+                </span>
+              </div>
+            </div>
+
+            <div class="flex items-center gap-3">
+              <button id="btnRestartGame" class="px-8 py-3.5 bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold rounded-xl shadow-lg shadow-cyan-500/20 transition-all transform hover:scale-105 active:scale-95 flex items-center gap-2 cursor-pointer">
+                <span>🔄</span>
+                <span>다시하기 (Space)</span>
+              </button>
+              <button class="btn-open-shop px-6 py-3.5 bg-slate-800 hover:bg-slate-700 text-white font-medium rounded-xl border border-slate-700 transition-colors flex items-center gap-2 cursor-pointer">
+                <span>🛒 상점 & 강화</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Touch Action Buttons -->
+        <div class="mt-4 flex items-center justify-between gap-4">
+          <button id="btnTouchSlide" class="flex-1 py-3.5 px-4 bg-slate-900/90 hover:bg-slate-800 border border-slate-800 active:border-amber-500 rounded-xl flex items-center justify-center gap-2 text-slate-200 active:scale-[0.98] transition-all cursor-pointer">
+            <span class="text-amber-400 font-bold">↓</span>
+            <span class="font-semibold text-sm">슬라이딩 (S / ↓)</span>
+          </button>
+          <button id="btnTouchJump" class="flex-1 py-3.5 px-4 bg-slate-900/90 hover:bg-slate-800 border border-slate-800 active:border-cyan-500 rounded-xl flex items-center justify-center gap-2 text-slate-200 active:scale-[0.98] transition-all cursor-pointer">
+            <span class="text-cyan-400 font-bold">↑</span>
+            <span class="font-semibold text-sm">점프 / 2단 점프 (Space / ↑)</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Feature Spotlight Strip -->
+      <section class="w-full max-w-5xl mt-8 grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div class="p-4 bg-slate-900/60 border border-slate-800/80 rounded-xl">
+          <div class="flex items-center gap-2 mb-1.5 text-cyan-400 font-bold text-sm">
+            <span>⚡</span>
+            <span>점프 vs 슬라이딩 판정</span>
+          </div>
+          <p class="text-xs text-slate-400 leading-relaxed">
+            지상 가시 장애물은 점프로 피하고, 공중에 뜬 분홍색 레이저 게이트는 슬라이딩(S 키)으로 통과하세요. 점프하면 머리가 닿아 충돌합니다!
+          </p>
+        </div>
+
+        <div class="p-4 bg-slate-900/60 border border-slate-800/80 rounded-xl">
+          <div class="flex items-center gap-2 mb-1.5 text-amber-400 font-bold text-sm">
+            <span>🪙</span>
+            <span>코인 획득 & 영구 강화</span>
+          </div>
+          <p class="text-xs text-slate-400 leading-relaxed">
+            주행 중 모은 코인은 상점에서 자석 흡입 시간, 보호막 무적 시간, 코인 가치 증폭 등 영구적인 능력치 강화에 사용할 수 있습니다.
+          </p>
+        </div>
+
+        <div class="p-4 bg-slate-900/60 border border-slate-800/80 rounded-xl">
+          <div class="flex items-center gap-2 mb-1.5 text-purple-400 font-bold text-sm">
+            <span>🛡️</span>
+            <span>다양한 특수 캐릭터</span>
+          </div>
+          <p class="text-xs text-slate-400 leading-relaxed">
+            기본 러너 외에도 공중 3단 점프가 가능한 퀀텀 캣, 매 판 보호막을 지급받는 골든 메카, 코인 보너스 닌자 등 개성 넘치는 캐릭터를 즐겨보세요.
+          </p>
+        </div>
+      </section>
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="w-full border-t border-slate-800/80 py-4 mt-8 text-center text-xs text-slate-500">
+      <div class="max-w-6xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-2">
+        <div>
+          <span>네온 러너 (Neon Runner)</span>
+          <span class="mx-2">·</span>
+          <span>방향키 또는 터치로 질주하는 2D 러닝 게임</span>
+        </div>
+        <div class="flex items-center gap-4">
+          <button class="btn-open-howto hover:text-slate-300 transition-colors">조작법</button>
+          <button class="btn-open-records hover:text-slate-300 transition-colors">기록실</button>
+          <button class="btn-open-shop hover:text-slate-300 transition-colors">상점</button>
+        </div>
+      </div>
+    </footer>
+
+    <!-- MODAL: Shop & Upgrades -->
+    <div id="shopModal" class="hidden fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-4">
+      <div class="bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto shadow-2xl p-6 text-slate-100 flex flex-col">
+        <div class="flex items-center justify-between pb-4 border-b border-slate-800">
+          <div class="flex items-center gap-3">
+            <h2 class="text-xl font-bold tracking-tight text-white flex items-center gap-2">
+              <span>🛒</span>
+              <span>상점 및 러너 강화</span>
+            </h2>
+            <div id="shopCoins" class="flex items-center gap-1.5 px-3 py-1 bg-amber-500/10 border border-amber-500/30 rounded-full text-amber-400 font-mono font-bold text-xs">
+              0 코인
+            </div>
+          </div>
+          <button class="btn-close-modal p-1.5 text-slate-400 hover:text-white rounded-lg hover:bg-slate-800 transition-colors">✕</button>
+        </div>
+
+        <div class="mt-6">
+          <h3 class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-3">러너 캐릭터 선택 및 해금</h3>
+          <div id="shopSkinsContainer" class="grid grid-cols-1 sm:grid-cols-2 gap-3"></div>
+        </div>
+
+        <div class="mt-6 mb-2">
+          <h3 class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-3">영구 파워업 강화</h3>
+          <div class="space-y-3">
+            <div id="upgrade_magnetDuration" class="flex items-center justify-between p-3.5 bg-slate-850/50 border border-slate-800 rounded-xl"></div>
+            <div id="upgrade_shieldDuration" class="flex items-center justify-between p-3.5 bg-slate-850/50 border border-slate-800 rounded-xl"></div>
+            <div id="upgrade_coinValue" class="flex items-center justify-between p-3.5 bg-slate-850/50 border border-slate-800 rounded-xl"></div>
+          </div>
+        </div>
+
+        <div class="pt-4 mt-6 border-t border-slate-800 flex justify-end">
+          <button class="btn-close-modal px-5 py-2.5 bg-slate-800 hover:bg-slate-700 text-white text-sm font-semibold rounded-xl transition-colors cursor-pointer">
+            닫기
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODAL: How To Play -->
+    <div id="howToPlayModal" class="hidden fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-4">
+      <div class="bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-xl max-h-[90vh] overflow-y-auto shadow-2xl p-6 text-slate-100 flex flex-col">
+        <div class="flex items-center justify-between pb-4 border-b border-slate-800">
+          <h2 class="text-xl font-bold tracking-tight text-white flex items-center gap-2">
+            <span>🎮</span>
+            <span>게임 조작 및 방법</span>
+          </h2>
+          <button class="btn-close-modal p-1.5 text-slate-400 hover:text-white rounded-lg hover:bg-slate-800 transition-colors">✕</button>
+        </div>
+
+        <div class="mt-5 space-y-4">
+          <h3 class="text-xs font-semibold text-slate-400 uppercase tracking-wider">기본 조작법 (키보드 / 터치)</h3>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div class="p-3.5 bg-slate-850 border border-slate-800 rounded-xl flex items-start gap-3">
+              <div class="p-2 bg-cyan-950 border border-cyan-800 rounded-lg text-cyan-400 font-bold">↑</div>
+              <div>
+                <div class="font-bold text-white text-sm">점프 / 2단 점프</div>
+                <div class="text-xs text-slate-400 mt-1">
+                  <span class="font-mono text-cyan-300">Space</span>, <span class="font-mono text-cyan-300">W</span>, <span class="font-mono text-cyan-300">↑</span> 키 또는 화면 탭.<br />
+                  공중에서 다시 누르면 2단 점프가 발동합니다.
+                </div>
+              </div>
+            </div>
+
+            <div class="p-3.5 bg-slate-850 border border-slate-800 rounded-xl flex items-start gap-3">
+              <div class="p-2 bg-amber-950 border border-amber-800 rounded-lg text-amber-400 font-bold">↓</div>
+              <div>
+                <div class="font-bold text-white text-sm">슬라이딩 (숙이기)</div>
+                <div class="text-xs text-slate-400 mt-1">
+                  <span class="font-mono text-amber-300">S</span>, <span class="font-mono text-amber-300">↓</span> 키 또는 슬라이딩 버튼.<br />
+                  공중에 떠 있는 레이저 게이트를 안전하게 피합니다.
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <h3 class="text-xs font-semibold text-slate-400 uppercase tracking-wider pt-2">장애물 대처 요령</h3>
+          <div class="space-y-2 text-xs">
+            <div class="flex items-center gap-3 p-2.5 bg-slate-850/60 rounded-lg border border-slate-800">
+              <span class="w-6 h-6 rounded bg-red-950 text-red-400 font-bold flex items-center justify-center shrink-0">▲</span>
+              <div><span class="font-bold text-white">지상 가시 / 장애물</span>: 타이밍에 맞춰 점프로 뛰어넘으세요.</div>
+            </div>
+            <div class="flex items-center gap-3 p-2.5 bg-slate-850/60 rounded-lg border border-slate-800">
+              <span class="w-6 h-6 rounded bg-rose-950 text-rose-400 font-bold flex items-center justify-center shrink-0">▼</span>
+              <div><span class="font-bold text-white">공중 레이저 게이트</span>: 점프하면 충돌합니다! 반드시 <span class="text-amber-400 font-semibold">슬라이딩</span>으로 낮게 미끄러지세요.</div>
+            </div>
+            <div class="flex items-center gap-3 p-2.5 bg-slate-850/60 rounded-lg border border-slate-800">
+              <span class="w-6 h-6 rounded bg-purple-950 text-purple-400 font-bold flex items-center justify-center shrink-0">▮</span>
+              <div><span class="font-bold text-white">거대 에너지 기둥</span>: 높이가 높으므로 <span class="text-cyan-400 font-semibold">2단 점프</span>로 넘어야 합니다.</div>
+            </div>
+          </div>
+
+          <h3 class="text-xs font-semibold text-slate-400 uppercase tracking-wider pt-2">파워업 아이템</h3>
+          <div class="grid grid-cols-2 gap-2 text-xs">
+            <div class="p-2.5 bg-slate-850/60 rounded-lg border border-slate-800 flex items-center gap-2">
+              <span class="text-base">🛡️</span>
+              <div>
+                <span class="font-bold text-sky-300">보호막 (Shield)</span>
+                <div class="text-slate-400 text-[11px]">충돌 1회를 무효화</div>
+              </div>
+            </div>
+            <div class="p-2.5 bg-slate-850/60 rounded-lg border border-slate-800 flex items-center gap-2">
+              <span class="text-base">🧲</span>
+              <div>
+                <span class="font-bold text-purple-300">자석 (Magnet)</span>
+                <div class="text-slate-400 text-[11px]">주변 코인을 자동 흡수</div>
+              </div>
+            </div>
+            <div class="p-2.5 bg-slate-850/60 rounded-lg border border-slate-800 flex items-center gap-2">
+              <span class="text-base">⚡</span>
+              <div>
+                <span class="font-bold text-orange-300">부스트 (Boost)</span>
+                <div class="text-slate-400 text-[11px]">무적 돌진 & 장애물 파괴</div>
+              </div>
+            </div>
+            <div class="p-2.5 bg-slate-850/60 rounded-lg border border-slate-800 flex items-center gap-2">
+              <span class="text-base">🪙</span>
+              <div>
+                <span class="font-bold text-emerald-300">2X 배수 (Double)</span>
+                <div class="text-slate-400 text-[11px]">점수 획득량 2배 증가</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="pt-4 mt-6 border-t border-slate-800 flex justify-end">
+          <button class="btn-close-modal px-5 py-2.5 bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold text-sm rounded-xl transition-colors cursor-pointer">
+            확인 및 게임하기
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODAL: Records & Achievements -->
+    <div id="recordsModal" class="hidden fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-4">
+      <div class="bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-lg max-h-[90vh] overflow-y-auto shadow-2xl p-6 text-slate-100 flex flex-col">
+        <div class="flex items-center justify-between pb-4 border-b border-slate-800">
+          <h2 class="text-xl font-bold tracking-tight text-white flex items-center gap-2">
+            <span>🏆</span>
+            <span>최고 기록 및 업적</span>
+          </h2>
+          <button class="btn-close-modal p-1.5 text-slate-400 hover:text-white rounded-lg hover:bg-slate-800 transition-colors">✕</button>
+        </div>
+
+        <div class="mt-5">
+          <h3 class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-3">난이도별 최고 점수</h3>
+          <div class="grid grid-cols-3 gap-2.5">
+            <div class="p-3 bg-slate-850/60 border border-slate-800 rounded-xl flex flex-col items-center text-center">
+              <span class="text-[11px] font-semibold text-slate-400 mb-1">쉬움 (Easy)</span>
+              <span id="recEasy" class="text-lg font-bold font-mono tabular-nums text-white">0</span>
+            </div>
+            <div class="p-3 bg-slate-850/60 border border-slate-800 rounded-xl flex flex-col items-center text-center">
+              <span class="text-[11px] font-semibold text-slate-400 mb-1">보통 (Normal)</span>
+              <span id="recNormal" class="text-lg font-bold font-mono tabular-nums text-white">0</span>
+            </div>
+            <div class="p-3 bg-slate-850/60 border border-slate-800 rounded-xl flex flex-col items-center text-center">
+              <span class="text-[11px] font-semibold text-slate-400 mb-1">매운맛 (Hard)</span>
+              <span id="recHard" class="text-lg font-bold font-mono tabular-nums text-white">0</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="mt-5 grid grid-cols-2 gap-3">
+          <div class="p-3 bg-slate-850/50 border border-slate-800 rounded-xl">
+            <div class="text-xs text-slate-400">총 누적 달린 거리</div>
+            <div id="recTotalDist" class="text-xl font-bold font-mono text-cyan-400 tabular-nums mt-0.5">0m</div>
+          </div>
+          <div class="p-3 bg-slate-850/50 border border-slate-800 rounded-xl">
+            <div class="text-xs text-slate-400">총 누적 코인</div>
+            <div class="text-xl font-bold font-mono text-amber-400 tabular-nums mt-0.5 flex items-center gap-1">
+              <span>🪙</span>
+              <span id="recTotalCoins">0</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="mt-5">
+          <h3 class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-3">도전 과제 (업적)</h3>
+          <div id="achievementsList" class="space-y-2"></div>
+        </div>
+
+        <div class="pt-4 mt-6 border-t border-slate-800 flex justify-end">
+          <button class="btn-close-modal px-5 py-2.5 bg-slate-800 hover:bg-slate-700 text-white text-sm font-semibold rounded-xl transition-colors cursor-pointer">
+            닫기
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Vanilla JS Game Engine Entry Point -->
+    <script src="./script.js"></script>
   </body>
 </html>
-
