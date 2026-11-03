@@ -1,0 +1,6 @@
+{
+  "name": "네온 러너 (Neon Runner)",
+  "description": "다양한 장애물을 피하고 점프와 슬라이딩으로 질주하는 흥미진진한 2D 러닝 액션 게임입니다.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
