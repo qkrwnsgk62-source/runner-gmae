@@ -1,6 +1,6 @@
 // ==========================================
-// 네온 러너 (Neon Runner) - Vanilla JS Engine
-// Standalone single-script for GitHub Pages
+// 쿠키 러너 (Cookie Runner) - Vanilla JS Engine
+// Mobile-first Fullscreen Cookie Running Game
 // ==========================================
 
 // --- Web Audio API Procedural Sound Engine ---
@@ -15,7 +15,7 @@ class SoundController {
     this.lastCoinTime = 0;
 
     try {
-      const saved = localStorage.getItem('neon_runner_mute');
+      const saved = localStorage.getItem('cookie_runner_mute');
       if (saved !== null) {
         this.isMuted = saved === 'true';
       }
@@ -37,7 +37,7 @@ class SoundController {
   setMuted(muted) {
     this.isMuted = muted;
     try {
-      localStorage.setItem('neon_runner_mute', String(muted));
+      localStorage.setItem('cookie_runner_mute', String(muted));
     } catch (e) {}
     if (muted && this.isMusicPlaying) {
       this.stopMusic();
@@ -58,14 +58,14 @@ class SoundController {
       const gain = this.ctx.createGain();
       const now = this.ctx.currentTime;
       osc.type = 'triangle';
-      osc.frequency.setValueAtTime(180, now);
-      osc.frequency.exponentialRampToValueAtTime(540, now + 0.14);
+      osc.frequency.setValueAtTime(220, now);
+      osc.frequency.exponentialRampToValueAtTime(620, now + 0.13);
       gain.gain.setValueAtTime(0.2, now);
-      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.15);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.14);
       osc.connect(gain);
       gain.connect(this.ctx.destination);
       osc.start(now);
-      osc.stop(now + 0.15);
+      osc.stop(now + 0.14);
     } catch (e) {}
   }
 
@@ -78,14 +78,14 @@ class SoundController {
       const osc = this.ctx.createOscillator();
       const gain = this.ctx.createGain();
       osc.type = 'sine';
-      osc.frequency.setValueAtTime(380, now);
-      osc.frequency.exponentialRampToValueAtTime(880, now + 0.16);
+      osc.frequency.setValueAtTime(440, now);
+      osc.frequency.exponentialRampToValueAtTime(980, now + 0.15);
       gain.gain.setValueAtTime(0.22, now);
-      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.18);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.16);
       osc.connect(gain);
       gain.connect(this.ctx.destination);
       osc.start(now);
-      osc.stop(now + 0.18);
+      osc.stop(now + 0.16);
     } catch (e) {}
   }
 
@@ -105,8 +105,8 @@ class SoundController {
       whiteNoise.buffer = buffer;
       const filter = this.ctx.createBiquadFilter();
       filter.type = 'lowpass';
-      filter.frequency.setValueAtTime(700, now);
-      filter.frequency.exponentialRampToValueAtTime(150, now + 0.14);
+      filter.frequency.setValueAtTime(800, now);
+      filter.frequency.exponentialRampToValueAtTime(180, now + 0.14);
       const gain = this.ctx.createGain();
       gain.gain.setValueAtTime(0.18, now);
       gain.gain.exponentialRampToValueAtTime(0.001, now + 0.14);
@@ -134,7 +134,7 @@ class SoundController {
       osc.type = 'sine';
       osc.frequency.setValueAtTime(freq, now);
       osc.frequency.setValueAtTime(freq * 1.5, now + 0.04);
-      gain.gain.setValueAtTime(0.18, now);
+      gain.gain.setValueAtTime(0.2, now);
       gain.gain.exponentialRampToValueAtTime(0.001, now + 0.12);
       osc.connect(gain);
       gain.connect(this.ctx.destination);
@@ -154,9 +154,9 @@ class SoundController {
         const now = this.ctx.currentTime + idx * 0.05;
         const osc = this.ctx.createOscillator();
         const gain = this.ctx.createGain();
-        osc.type = 'square';
+        osc.type = 'triangle';
         osc.frequency.setValueAtTime(freq, now);
-        gain.gain.setValueAtTime(0.1, now);
+        gain.gain.setValueAtTime(0.14, now);
         gain.gain.exponentialRampToValueAtTime(0.001, now + 0.14);
         osc.connect(gain);
         gain.connect(this.ctx.destination);
@@ -175,14 +175,14 @@ class SoundController {
       const osc = this.ctx.createOscillator();
       const gain = this.ctx.createGain();
       osc.type = 'sawtooth';
-      osc.frequency.setValueAtTime(140, now);
-      osc.frequency.exponentialRampToValueAtTime(30, now + 0.25);
-      gain.gain.setValueAtTime(0.3, now);
-      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.25);
+      osc.frequency.setValueAtTime(160, now);
+      osc.frequency.exponentialRampToValueAtTime(40, now + 0.22);
+      gain.gain.setValueAtTime(0.32, now);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.22);
       osc.connect(gain);
       gain.connect(this.ctx.destination);
       osc.start(now);
-      osc.stop(now + 0.25);
+      osc.stop(now + 0.22);
     } catch (e) {}
   }
 
@@ -191,7 +191,7 @@ class SoundController {
     this.initCtx();
     if (!this.ctx) return;
     try {
-      const chord = [330, 293.66, 261.63, 196];
+      const chord = [349.23, 311.13, 261.63, 196];
       chord.forEach((freq, idx) => {
         if (!this.ctx) return;
         const now = this.ctx.currentTime + idx * 0.12;
@@ -199,7 +199,7 @@ class SoundController {
         const gain = this.ctx.createGain();
         osc.type = 'triangle';
         osc.frequency.setValueAtTime(freq, now);
-        gain.gain.setValueAtTime(0.2, now);
+        gain.gain.setValueAtTime(0.22, now);
         gain.gain.exponentialRampToValueAtTime(0.001, now + 0.35);
         osc.connect(gain);
         gain.connect(this.ctx.destination);
@@ -218,9 +218,9 @@ class SoundController {
       const osc = this.ctx.createOscillator();
       const gain = this.ctx.createGain();
       osc.type = 'sine';
-      osc.frequency.setValueAtTime(600, now);
-      osc.frequency.exponentialRampToValueAtTime(300, now + 0.04);
-      gain.gain.setValueAtTime(0.1, now);
+      osc.frequency.setValueAtTime(650, now);
+      osc.frequency.exponentialRampToValueAtTime(320, now + 0.04);
+      gain.gain.setValueAtTime(0.12, now);
       gain.gain.exponentialRampToValueAtTime(0.001, now + 0.04);
       osc.connect(gain);
       gain.connect(this.ctx.destination);
@@ -235,29 +235,25 @@ class SoundController {
     if (!this.ctx) return;
     this.isMusicPlaying = true;
     let step = 0;
-    const bassline = [110, 110, 146.83, 130.81, 110, 110, 164.81, 146.83];
+    const notes = [261.63, 329.63, 392.0, 523.25, 440.0, 392.0, 329.63, 293.66];
     this.musicInterval = window.setInterval(() => {
       if (!this.ctx || this.isMuted || !this.isMusicPlaying) return;
       try {
         const now = this.ctx.currentTime;
-        const freq = bassline[step % bassline.length];
+        const freq = notes[step % notes.length];
         step++;
         const osc = this.ctx.createOscillator();
         const gain = this.ctx.createGain();
-        osc.type = 'sawtooth';
+        osc.type = 'sine';
         osc.frequency.setValueAtTime(freq, now);
-        const filter = this.ctx.createBiquadFilter();
-        filter.type = 'lowpass';
-        filter.frequency.setValueAtTime(450, now);
         gain.gain.setValueAtTime(0.06, now);
-        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.16);
-        osc.connect(filter);
-        filter.connect(gain);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.18);
+        osc.connect(gain);
         gain.connect(this.ctx.destination);
         osc.start(now);
-        osc.stop(now + 0.16);
+        osc.stop(now + 0.18);
       } catch (e) {}
-    }, 200);
+    }, 220);
   }
 
   stopMusic() {
@@ -271,51 +267,59 @@ class SoundController {
 
 const sound = new SoundController();
 
-// --- Game Data & Configurations ---
+// --- Cookie Characters Data (All purchasable with in-game coins) ---
 const SKINS = [
   {
-    id: 'striker',
-    name: '네온 스트라이커',
-    desc: '균형 잡힌 민첩성과 안정적인 점프력을 가진 기본 러너',
+    id: 'ginger',
+    name: '진저브레드 쿠키',
+    desc: '달콤한 설탕 프로스팅과 미소를 지닌 국민 대표 쿠키!',
     cost: 0,
-    color: '#06b6d4',
-    accentColor: '#38bdf8',
-    perk: '표준 2단 점프 기본 제공',
+    doughColor: '#d97706', // warm golden brown gingerbread
+    icingColor: '#ffffff',
+    btnColor1: '#ef4444',
+    btnColor2: '#10b981',
+    perk: '기본 2단 점프 탑재',
     extraJumps: 1,
     initialShield: false,
     coinMultiplier: 1.0,
   },
   {
-    id: 'ninja',
-    name: '사이버 닌자',
-    desc: '고속 기동 시 추가 코인을 획득하는 그림자 질주자',
+    id: 'choco',
+    name: '초코칩 쿠키',
+    desc: '진한 초코 반죽에 초코칩이 콕콕 박혀 코인을 더 많이 끌어모으는 쿠키!',
     cost: 60,
-    color: '#a855f7',
-    accentColor: '#c084fc',
+    doughColor: '#78350f', // rich dark chocolate dough
+    icingColor: '#f472b6', // pink icing
+    btnColor1: '#3b82f6',
+    btnColor2: '#f59e0b',
     perk: '코인 획득량 +20% 증가',
     extraJumps: 1,
     initialShield: false,
     coinMultiplier: 1.2,
   },
   {
-    id: 'mecha',
-    name: '골든 메카',
-    desc: '강력한 장갑으로 첫 충돌을 무료로 방어하는 헤비 러너',
+    id: 'strawberry',
+    name: '딸기 생크림 쿠키',
+    desc: '부드러운 딸기 크림과 딸기 사탕 모자로 첫 충돌을 보호받는 쿠키!',
     cost: 150,
-    color: '#eab308',
-    accentColor: '#fde047',
-    perk: '매 게임 시작 시 보호막(실드) 1회 무료 지급',
+    doughColor: '#f43f5e', // strawberry dough
+    icingColor: '#ffffff',
+    btnColor1: '#ffffff',
+    btnColor2: '#fbbf24',
+    perk: '시작 시 딸기 설탕 보호막 1회 무료 지급',
     extraJumps: 1,
     initialShield: true,
     coinMultiplier: 1.0,
   },
   {
-    id: 'cat',
-    name: '퀀텀 캣',
-    desc: '공중에서 3번 연속 도약할 수 있는 궁극의 아크로바틱 러너',
+    id: 'butter_gold',
+    name: '황금 버터 쿠키',
+    desc: '눈부신 허니 버터로 구워져 공중에서 3번 연속 도약하는 아크로바틱 쿠키!',
     cost: 250,
-    color: '#ec4899',
-    accentColor: '#f472b6',
+    doughColor: '#eab308', // golden honey butter
+    icingColor: '#fef08a',
+    btnColor1: '#ec4899',
+    btnColor2: '#06b6d4',
     perk: '공중 3단 점프 (트리플 점프) 가능!',
     extraJumps: 2,
     initialShield: false,
@@ -329,14 +333,14 @@ const UPGRADE_COSTS = {
   coinValue: [50, 90, 150, 240],
 };
 
-const STORAGE_KEY = 'neon_runner_save_v1';
+const STORAGE_KEY = 'cookie_runner_save_v2';
 
-// Default State
+// Player persisted data
 let playerData = {
-  totalCoins: 20,
+  totalCoins: 30, // starter coins
   highScores: { easy: 0, normal: 0, hard: 0 },
-  unlockedSkins: ['striker'],
-  activeSkin: 'striker',
+  unlockedSkins: ['ginger'],
+  activeSkin: 'ginger',
   upgrades: {
     magnetDuration: 1,
     shieldDuration: 1,
@@ -347,7 +351,6 @@ let playerData = {
 let totalDistance = 0;
 let totalRuns = 0;
 
-// Load persisted data
 try {
   const saved = localStorage.getItem(STORAGE_KEY);
   if (saved) {
@@ -359,19 +362,19 @@ try {
       upgrades: { ...playerData.upgrades, ...(parsed.upgrades || {}) },
     };
   }
-  totalDistance = Number(localStorage.getItem('neon_runner_total_dist') || 0);
-  totalRuns = Number(localStorage.getItem('neon_runner_total_runs') || 0);
+  totalDistance = Number(localStorage.getItem('cookie_runner_total_dist') || 0);
+  totalRuns = Number(localStorage.getItem('cookie_runner_total_runs') || 0);
 } catch (e) {}
 
 function savePlayerData() {
   try {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(playerData));
-    localStorage.setItem('neon_runner_total_dist', String(totalDistance));
-    localStorage.setItem('neon_runner_total_runs', String(totalRuns));
+    localStorage.setItem('cookie_runner_total_dist', String(totalDistance));
+    localStorage.setItem('cookie_runner_total_runs', String(totalRuns));
   } catch (e) {}
 }
 
-// --- Active Game Session State ---
+// Active Game State
 let currentDifficulty = 'normal';
 let gameState = 'MENU'; // 'MENU' | 'PLAYING' | 'PAUSED' | 'GAME_OVER'
 
@@ -397,8 +400,8 @@ const game = {
   particles: [],
   floatingTexts: [],
   speedLines: [],
-  stars: [],
-  buildings: [],
+  clouds: [],
+  hills: [],
   groundGridOffset: 0,
   shake: 0,
   invincibleTimer: 0,
@@ -406,8 +409,8 @@ const game = {
     x: 130,
     y: GROUND_Y - 60,
     vy: 0,
-    width: 38,
-    height: 60,
+    width: 44,
+    height: 62,
     isGrounded: true,
     isSliding: false,
     slideTimer: 0,
@@ -419,39 +422,35 @@ const game = {
   },
 };
 
-// Canvas references
 const canvas = document.getElementById('gameCanvas');
 const ctx = canvas.getContext('2d');
 
-// Initialize scenery
+// Initialize candy scenery (candy land / cookie world)
 function initScenery() {
-  game.stars = [];
-  for (let i = 0; i < 70; i++) {
-    game.stars.push({
+  game.clouds = [];
+  for (let i = 0; i < 6; i++) {
+    game.clouds.push({
       x: Math.random() * V_WIDTH,
-      y: Math.random() * (GROUND_Y - 140),
-      size: Math.random() * 2 + 1,
-      speed: Math.random() * 0.4 + 0.1,
-      alpha: Math.random() * 0.7 + 0.3,
+      y: Math.random() * 120 + 20,
+      width: Math.random() * 80 + 90,
+      height: 35,
+      speed: Math.random() * 0.3 + 0.15,
+      alpha: Math.random() * 0.4 + 0.4,
     });
   }
 
-  game.buildings = [];
+  game.hills = [];
   let curX = 0;
   while (curX < V_WIDTH * 2) {
-    const bWidth = Math.floor(Math.random() * 60 + 50);
-    const bHeight = Math.floor(Math.random() * 150 + 100);
-    const numWindows = Math.floor(bHeight / 20) * Math.floor(bWidth / 15);
-    const windows = Array.from({ length: numWindows }, () => Math.random() > 0.45);
-    const shade = Math.floor(Math.random() * 15 + 15);
-    game.buildings.push({
+    const hWidth = Math.floor(Math.random() * 120 + 100);
+    const hHeight = Math.floor(Math.random() * 90 + 70);
+    game.hills.push({
       x: curX,
-      width: bWidth,
-      height: bHeight,
-      color: `rgb(${shade - 5}, ${shade}, ${shade + 18})`,
-      windows,
+      width: hWidth,
+      height: hHeight,
+      color: Math.random() > 0.5 ? '#3b1c54' : '#28133f', // candy violet sugar hills
     });
-    curX += bWidth + Math.floor(Math.random() * 20 + 8);
+    curX += hWidth * 0.75;
   }
 }
 initScenery();
@@ -460,36 +459,36 @@ function getActiveSkin() {
   return SKINS.find((s) => s.id === playerData.activeSkin) || SKINS[0];
 }
 
-// Particle Generators
-function createJumpDust(x, y, color) {
-  for (let i = 0; i < 8; i++) {
+// Particle Generators (Cookie crumbs & sugar sparkles)
+function createCrumbDust(x, y, color = '#d97706') {
+  for (let i = 0; i < 7; i++) {
     game.particles.push({
       x: x + (Math.random() - 0.5) * 20,
       y: y - 2,
       vx: (Math.random() - 0.5) * 4 - 2,
-      vy: -Math.random() * 2 - 0.5,
+      vy: -Math.random() * 2.5 - 0.5,
       size: Math.random() * 3 + 2,
       color,
-      alpha: 0.8,
+      alpha: 0.85,
       life: 0,
       maxLife: 0.35,
-      shape: 'circle',
+      shape: 'crumb',
     });
   }
 }
 
-function createSlideSparks(x, y) {
-  for (let i = 0; i < 10; i++) {
+function createSlideSugarSparks(x, y) {
+  for (let i = 0; i < 8; i++) {
     game.particles.push({
-      x: x + Math.random() * 20,
+      x: x + Math.random() * 25,
       y: y - 2,
       vx: -Math.random() * 6 - 2,
       vy: -Math.random() * 3,
       size: Math.random() * 3 + 1,
-      color: '#f59e0b',
-      alpha: 0.9,
+      color: '#fef08a', // sugar sprinkles
+      alpha: 0.95,
       life: 0,
-      maxLife: 0.4,
+      maxLife: 0.35,
       shape: 'spark',
     });
   }
@@ -510,10 +509,10 @@ function createRingWave(x, y, color) {
   });
 }
 
-function createExplosion(x, y, color, count = 24) {
+function createExplosion(x, y, color, count = 22) {
   for (let i = 0; i < count; i++) {
     const angle = Math.random() * Math.PI * 2;
-    const spd = Math.random() * 9 + 2;
+    const spd = Math.random() * 8 + 2;
     game.particles.push({
       x,
       y,
@@ -523,8 +522,8 @@ function createExplosion(x, y, color, count = 24) {
       color,
       alpha: 1,
       life: 0,
-      maxLife: Math.random() * 0.4 + 0.4,
-      shape: Math.random() > 0.5 ? 'spark' : 'circle',
+      maxLife: Math.random() * 0.4 + 0.35,
+      shape: Math.random() > 0.4 ? 'spark' : 'circle',
     });
   }
 }
@@ -540,7 +539,7 @@ function addFloatingText(x, y, text, color) {
   });
 }
 
-// Player Actions
+// Player Actions (Jump & Slide)
 function handleJump() {
   if (gameState !== 'PLAYING') return;
   const p = game.player;
@@ -548,8 +547,8 @@ function handleJump() {
 
   if (p.isSliding) {
     p.isSliding = false;
-    p.height = 60;
-    p.y = GROUND_Y - 60;
+    p.height = 62;
+    p.y = GROUND_Y - 62;
   }
 
   if (p.isGrounded || p.coyoteTimer > 0) {
@@ -558,12 +557,12 @@ function handleJump() {
     p.coyoteTimer = 0;
     p.jumpsRemaining = skin.extraJumps;
     sound.playJump();
-    createJumpDust(p.x + 20, GROUND_Y, skin.color);
+    createCrumbDust(p.x + 20, GROUND_Y, skin.doughColor);
   } else if (p.jumpsRemaining > 0) {
     p.vy = -12.5;
     p.jumpsRemaining -= 1;
     sound.playDoubleJump();
-    createRingWave(p.x + 20, p.y + p.height, skin.accentColor);
+    createRingWave(p.x + 20, p.y + p.height, '#fde047');
   } else {
     p.jumpBufferTimer = 0.18;
   }
@@ -575,16 +574,16 @@ function handleSlide() {
   if (!p.isSliding) {
     p.isSliding = true;
     p.slideTimer = 0.6;
-    p.height = 28;
+    p.height = 30; // lower cookie profile
     if (p.isGrounded) {
-      p.y = GROUND_Y - 28;
+      p.y = GROUND_Y - 30;
     }
     sound.playSlide();
-    createSlideSparks(p.x + 10, GROUND_Y);
+    createSlideSugarSparks(p.x + 10, GROUND_Y);
   }
 }
 
-// Start / Restart Game
+// Start Game
 function startGame() {
   let initialSpeed = 7.0;
   if (currentDifficulty === 'easy') initialSpeed = 6.0;
@@ -612,10 +611,10 @@ function startGame() {
 
   const p = game.player;
   p.x = 130;
-  p.y = GROUND_Y - 60;
+  p.y = GROUND_Y - 62;
   p.vy = 0;
-  p.width = 38;
-  p.height = 60;
+  p.width = 44;
+  p.height = 62;
   p.isGrounded = true;
   p.isSliding = false;
   p.slideTimer = 0;
@@ -628,7 +627,7 @@ function startGame() {
       timeLeft: 999,
       maxTime: 999,
     });
-    addFloatingText(p.x + 20, p.y - 20, '보호막 장착!', '#38bdf8');
+    addFloatingText(p.x + 20, p.y - 20, '딸기 설탕 보호막!', '#f43f5e');
   }
 
   setGameState('PLAYING');
@@ -666,7 +665,7 @@ function handleGameOver() {
   sound.playGameOver();
   game.shake = 18;
   const skin = getActiveSkin();
-  createExplosion(game.player.x + 20, game.player.y + 30, skin.color, 36);
+  createExplosion(game.player.x + 20, game.player.y + 30, skin.doughColor, 36);
 
   const finalScore = Math.floor(game.score);
   const finalDistance = Math.floor(game.distance / 10);
@@ -683,7 +682,6 @@ function handleGameOver() {
   }
   savePlayerData();
 
-  // Update Game Over UI
   document.getElementById('goScore').innerText = finalScore.toLocaleString();
   document.getElementById('goDistance').innerText = `${finalDistance}m`;
   document.getElementById('goCoins').innerText = `+${finalCoins}`;
@@ -698,27 +696,206 @@ function updateHUD() {
   document.getElementById('hudDistance').innerText = `${Math.floor(game.distance / 10)}m`;
   document.getElementById('hudCoins').innerText = game.coins;
 
-  // Active powerup badges
   const container = document.getElementById('activePowerupsList');
   container.innerHTML = '';
   game.activePowerUps.forEach((pu) => {
     const badge = document.createElement('div');
-    badge.className = 'flex items-center gap-1.5 px-3 py-1.5 bg-slate-900/90 backdrop-blur-md rounded-lg border border-slate-700/80 text-xs text-white';
+    badge.className = 'flex items-center gap-1.5 px-2.5 py-1 bg-black/60 backdrop-blur-md rounded-lg border border-white/20 text-xs text-white';
     const icon = pu.type === 'shield' ? '🛡️' : pu.type === 'magnet' ? '🧲' : pu.type === 'boost' ? '⚡' : '2X';
     const label = pu.type === 'shield' ? 'ON' : `${Math.ceil(pu.timeLeft)}s`;
-    badge.innerHTML = `<span class="text-sm">${icon}</span><span class="font-mono tabular-nums font-semibold">${label}</span>`;
+    badge.innerHTML = `<span>${icon}</span><span class="font-mono tabular-nums font-semibold">${label}</span>`;
     container.appendChild(badge);
   });
 }
 
 function updateUIElements() {
-  document.getElementById('topCoins').innerText = playerData.totalCoins;
+  document.getElementById('hudTopCoins').innerText = playerData.totalCoins;
   document.getElementById('shopCoins').innerText = `${playerData.totalCoins} 코인`;
-  document.getElementById('bestScore').innerText = `${(playerData.highScores[currentDifficulty] || 0).toLocaleString()}점`;
 
   const skin = getActiveSkin();
-  document.getElementById('activeSkinName').innerText = skin.name;
-  document.getElementById('activeSkinDot').style.backgroundColor = skin.color;
+  const nameEl = document.getElementById('activeSkinName');
+  if (nameEl) nameEl.innerText = skin.name;
+}
+
+// --- DRAWING: CUTE COOKIE CHARACTER RUNNER ---
+function drawCookieCharacter(ctx, p, skin, currentTime, isGrounded, isSliding, legAngle) {
+  ctx.save();
+
+  const centerX = p.x + p.width / 2;
+  const doughColor = skin.doughColor;
+  const icingColor = skin.icingColor;
+
+  if (isSliding) {
+    // SLIDING COOKIE POSE: Leaning forward horizontally, streamlined crouch
+    ctx.translate(centerX, p.y + p.height / 2);
+    ctx.rotate(-0.18); // slight forward tilt
+
+    // Cookie body oval
+    ctx.fillStyle = doughColor;
+    ctx.beginPath();
+    ctx.ellipse(0, 0, 30, 14, 0, 0, Math.PI * 2);
+    ctx.fill();
+
+    // Cookie head (front right)
+    ctx.beginPath();
+    ctx.arc(18, -4, 13, 0, Math.PI * 2);
+    ctx.fill();
+
+    // Eye (happy squint)
+    ctx.strokeStyle = '#271406';
+    ctx.lineWidth = 2.5;
+    ctx.beginPath();
+    ctx.arc(22, -6, 3, Math.PI, Math.PI * 2);
+    ctx.stroke();
+
+    // Sweet blushing cheek
+    ctx.fillStyle = 'rgba(244, 63, 94, 0.6)';
+    ctx.beginPath();
+    ctx.arc(22, -1, 3.5, 0, Math.PI * 2);
+    ctx.fill();
+
+    // Sugar frosting zigzag on back
+    ctx.strokeStyle = icingColor;
+    ctx.lineWidth = 2.5;
+    ctx.lineCap = 'round';
+    ctx.beginPath();
+    ctx.moveTo(-16, -2);
+    ctx.lineTo(-8, 3);
+    ctx.lineTo(0, -2);
+    ctx.lineTo(8, 3);
+    ctx.stroke();
+
+    // Candy button
+    ctx.fillStyle = skin.btnColor1;
+    ctx.beginPath();
+    ctx.arc(4, 1, 3, 0, Math.PI * 2);
+    ctx.fill();
+
+  } else {
+    // STANDING / RUNNING / JUMPING COOKIE
+    const legSwing = Math.sin(legAngle) * 14;
+
+    // 1. Legs (Cookie Dough Stumps)
+    ctx.fillStyle = doughColor;
+    if (isGrounded) {
+      // Left leg
+      ctx.beginPath();
+      ctx.ellipse(p.x + 15 + legSwing * 0.7, p.y + 52, 6, 10, legSwing * 0.05, 0, Math.PI * 2);
+      ctx.fill();
+      // Right leg
+      ctx.beginPath();
+      ctx.ellipse(p.x + 29 - legSwing * 0.7, p.y + 52, 6, 10, -legSwing * 0.05, 0, Math.PI * 2);
+      ctx.fill();
+    } else {
+      // Jump legs (tucked in joy)
+      ctx.beginPath();
+      ctx.ellipse(p.x + 14, p.y + 48, 6, 8, -0.4, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.beginPath();
+      ctx.ellipse(p.x + 30, p.y + 48, 6, 8, 0.4, 0, Math.PI * 2);
+      ctx.fill();
+    }
+
+    // Sugar frosting on ankles
+    ctx.strokeStyle = icingColor;
+    ctx.lineWidth = 2.5;
+    ctx.lineCap = 'round';
+    ctx.beginPath();
+    ctx.moveTo(p.x + 10, p.y + 54);
+    ctx.lineTo(p.x + 18, p.y + 54);
+    ctx.moveTo(p.x + 24, p.y + 54);
+    ctx.lineTo(p.x + 32, p.y + 54);
+    ctx.stroke();
+
+    // 2. Cookie Torso
+    ctx.fillStyle = doughColor;
+    ctx.beginPath();
+    ctx.ellipse(centerX, p.y + 36, 15, 17, 0, 0, Math.PI * 2);
+    ctx.fill();
+
+    // Candy Gumdrop Buttons on Chest
+    ctx.fillStyle = skin.btnColor1;
+    ctx.beginPath();
+    ctx.arc(centerX, p.y + 30, 3.5, 0, Math.PI * 2);
+    ctx.fill();
+    // button shine
+    ctx.fillStyle = '#ffffff';
+    ctx.beginPath();
+    ctx.arc(centerX - 1, p.y + 29, 1, 0, Math.PI * 2);
+    ctx.fill();
+
+    ctx.fillStyle = skin.btnColor2;
+    ctx.beginPath();
+    ctx.arc(centerX, p.y + 40, 3.5, 0, Math.PI * 2);
+    ctx.fill();
+
+    // 3. Arms (Cookie arms swinging)
+    ctx.fillStyle = doughColor;
+    if (isGrounded) {
+      // Left arm swinging
+      ctx.beginPath();
+      ctx.ellipse(p.x + 8, p.y + 34 - legSwing * 0.5, 5, 8, -legSwing * 0.04, 0, Math.PI * 2);
+      ctx.fill();
+      // Right arm
+      ctx.beginPath();
+      ctx.ellipse(p.x + 36, p.y + 34 + legSwing * 0.5, 5, 8, legSwing * 0.04, 0, Math.PI * 2);
+      ctx.fill();
+    } else {
+      // Jump cheer arms!
+      ctx.beginPath();
+      ctx.ellipse(p.x + 7, p.y + 24, 5, 9, -0.6, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.beginPath();
+      ctx.ellipse(p.x + 37, p.y + 24, 5, 9, 0.6, 0, Math.PI * 2);
+      ctx.fill();
+    }
+
+    // 4. Cookie Head
+    ctx.fillStyle = doughColor;
+    ctx.beginPath();
+    ctx.arc(centerX, p.y + 15, 15, 0, Math.PI * 2);
+    ctx.fill();
+
+    // Sugar Icing Frosting on Forehead/Hair
+    ctx.strokeStyle = icingColor;
+    ctx.lineWidth = 3;
+    ctx.lineCap = 'round';
+    ctx.beginPath();
+    ctx.moveTo(centerX - 10, p.y + 5);
+    ctx.quadraticCurveTo(centerX - 5, p.y + 9, centerX, p.y + 5);
+    ctx.quadraticCurveTo(centerX + 5, p.y + 9, centerX + 10, p.y + 5);
+    ctx.stroke();
+
+    // Cookie Eyes (Chocolate bead eyes)
+    ctx.fillStyle = '#271406';
+    ctx.beginPath();
+    ctx.arc(centerX - 5, p.y + 13, 2.5, 0, Math.PI * 2);
+    ctx.arc(centerX + 5, p.y + 13, 2.5, 0, Math.PI * 2);
+    ctx.fill();
+
+    // White eye twinkle shine
+    ctx.fillStyle = '#ffffff';
+    ctx.beginPath();
+    ctx.arc(centerX - 6, p.y + 12, 0.9, 0, Math.PI * 2);
+    ctx.arc(centerX + 4, p.y + 12, 0.9, 0, Math.PI * 2);
+    ctx.fill();
+
+    // Rosy Cookie Cheeks
+    ctx.fillStyle = 'rgba(244, 63, 94, 0.55)';
+    ctx.beginPath();
+    ctx.arc(centerX - 9, p.y + 17, 3, 0, Math.PI * 2);
+    ctx.arc(centerX + 9, p.y + 17, 3, 0, Math.PI * 2);
+    ctx.fill();
+
+    // Cute Smile
+    ctx.strokeStyle = '#271406';
+    ctx.lineWidth = 1.8;
+    ctx.beginPath();
+    ctx.arc(centerX, p.y + 16, 4, 0.2, Math.PI - 0.2);
+    ctx.stroke();
+  }
+
+  ctx.restore();
 }
 
 // -------------------------------------------------------------
@@ -743,7 +920,7 @@ function gameLoop(currentTime) {
       updateHUD();
     }
 
-    // Powerup count downs
+    // Powerup countdowns
     for (let i = game.activePowerUps.length - 1; i >= 0; i--) {
       const p = game.activePowerUps[i];
       p.timeLeft -= dt;
@@ -771,8 +948,8 @@ function gameLoop(currentTime) {
         );
         if (!blockedByHighLaser) {
           p.isSliding = false;
-          p.height = 60;
-          p.y = GROUND_Y - 60;
+          p.height = 62;
+          p.y = GROUND_Y - 62;
         } else {
           p.slideTimer = 0.1;
         }
@@ -787,7 +964,7 @@ function gameLoop(currentTime) {
         p.vy = 0;
         p.isGrounded = true;
         p.jumpsRemaining = 1 + skin.extraJumps;
-        createJumpDust(p.x + 15, GROUND_Y, '#94a3b8');
+        createCrumbDust(p.x + 15, GROUND_Y, skin.doughColor);
 
         if (p.jumpBufferTimer > 0) {
           p.jumpBufferTimer = 0;
@@ -824,7 +1001,7 @@ function gameLoop(currentTime) {
       p.trailHistory.shift();
     }
 
-    // Spawn Obstacles
+    // Spawn Obstacles (Candy cane barriers, flying drone forks, giant sugar monoliths)
     game.distanceToNextObstacle -= game.speed * dt * 60;
     if (game.distanceToNextObstacle <= 0) {
       const types = ['low_barrier', 'high_laser', 'tall_pillar'];
@@ -843,7 +1020,7 @@ function gameLoop(currentTime) {
         height = 36;
         y = GROUND_Y - 82;
       } else if (chosenType === 'tall_pillar') {
-        width = 32;
+        width = 34;
         height = 88;
         y = GROUND_Y - 88;
       } else if (chosenType === 'double_hurdle') {
@@ -867,7 +1044,7 @@ function gameLoop(currentTime) {
       game.distanceToNextObstacle = baseGap + Math.random() * 260;
     }
 
-    // Spawn Coins
+    // Spawn Coins (Golden Cookie Coins)
     game.distanceToNextCoin -= game.speed * dt * 60;
     if (game.distanceToNextCoin <= 0) {
       const patternType = Math.random() > 0.4 ? 'arc' : 'line';
@@ -883,7 +1060,7 @@ function gameLoop(currentTime) {
           id: Date.now() + i + Math.random(),
           x: V_WIDTH + 60 + i * 42,
           y: coinY,
-          radius: 11,
+          radius: 12,
           collected: false,
           animOffset: i * 0.3,
         });
@@ -891,7 +1068,7 @@ function gameLoop(currentTime) {
       game.distanceToNextCoin = 280 + Math.random() * 200;
     }
 
-    // Spawn Powerups
+    // Spawn Powerups (Jelly items)
     game.distanceToNextPowerUp -= game.speed * dt * 60;
     if (game.distanceToNextPowerUp <= 0) {
       const pTypes = ['shield', 'magnet', 'boost', 'multiplier'];
@@ -979,9 +1156,9 @@ function gameLoop(currentTime) {
         });
 
         const labels = {
-          shield: '보호막 획득!',
-          magnet: '자석 활성화!',
-          boost: '초고속 대시!',
+          shield: '설탕 보호막 획득!',
+          magnet: '자석 젤리 활성화!',
+          boost: '초고속 쿠키 대시!',
           multiplier: '2X 점수 부스트!',
         };
         const colors = {
@@ -1082,17 +1259,19 @@ function gameLoop(currentTime) {
     if (sl.x < -sl.length) game.speedLines.splice(i, 1);
   }
 
-  for (const star of game.stars) {
-    star.x -= star.speed * (gameState === 'PLAYING' ? game.speed * 0.1 : 0.4);
-    if (star.x < 0) star.x = V_WIDTH;
+  for (const c of game.clouds) {
+    c.x -= c.speed * (gameState === 'PLAYING' ? game.speed * 0.15 : 0.4);
+    if (c.x < -c.width) c.x = V_WIDTH + 20;
   }
 
-  const bSpeed = (gameState === 'PLAYING' ? game.speed : 1.5) * 0.25;
-  for (const b of game.buildings) {
-    b.x -= bSpeed;
-    if (b.x + b.width < 0) {
-      const maxBx = Math.max(...game.buildings.map((it) => it.x + it.width));
-      b.x = maxBx + Math.floor(Math.random() * 20 + 8);
+  const hSpeed = (gameState === 'PLAYING' ? game.speed : 1.5) * 0.25;
+  for (const h of game.hills) {
+    h.x -= hSpeed;
+  }
+  for (const h of game.hills) {
+    if (h.x + h.width < 0) {
+      const maxHx = Math.max(...game.hills.map((it) => it.x + it.width));
+      h.x = maxHx;
     }
   }
 
@@ -1104,91 +1283,78 @@ function gameLoop(currentTime) {
     ctx.translate((Math.random() - 0.5) * game.shake, (Math.random() - 0.5) * game.shake);
   }
 
-  // Sky Gradient
+  // Sky: Candy sunset twilight
   const skyGrad = ctx.createLinearGradient(0, 0, 0, GROUND_Y);
-  skyGrad.addColorStop(0, '#030712');
-  skyGrad.addColorStop(0.65, '#0b132b');
-  skyGrad.addColorStop(1, '#1c1938');
+  skyGrad.addColorStop(0, '#110c26');
+  skyGrad.addColorStop(0.5, '#2e1065');
+  skyGrad.addColorStop(1, '#6b21a8');
   ctx.fillStyle = skyGrad;
   ctx.fillRect(0, 0, V_WIDTH, V_HEIGHT);
 
-  // Neon Moon
-  const moonGrad = ctx.createRadialGradient(760, 140, 10, 760, 140, 95);
-  moonGrad.addColorStop(0, 'rgba(236, 72, 153, 0.9)');
-  moonGrad.addColorStop(0.5, 'rgba(168, 85, 247, 0.4)');
-  moonGrad.addColorStop(1, 'rgba(168, 85, 247, 0)');
+  // Candy Moon / Sugar Sun
+  const moonGrad = ctx.createRadialGradient(760, 130, 10, 760, 130, 80);
+  moonGrad.addColorStop(0, '#fde047');
+  moonGrad.addColorStop(0.6, 'rgba(250, 204, 21, 0.4)');
+  moonGrad.addColorStop(1, 'rgba(250, 204, 21, 0)');
   ctx.fillStyle = moonGrad;
   ctx.beginPath();
-  ctx.arc(760, 140, 95, 0, Math.PI * 2);
+  ctx.arc(760, 130, 80, 0, Math.PI * 2);
   ctx.fill();
 
-  ctx.fillStyle = '#f43f5e';
+  ctx.fillStyle = '#fef08a';
   ctx.beginPath();
-  ctx.arc(760, 140, 52, 0, Math.PI * 2);
+  ctx.arc(760, 130, 42, 0, Math.PI * 2);
   ctx.fill();
 
-  ctx.fillStyle = '#030712';
-  for (let slY = 120; slY < 185; slY += 8) {
-    ctx.fillRect(700, slY, 120, (slY - 110) * 0.08 + 1.5);
+  // Floating Fluffy Sugar Clouds
+  for (const c of game.clouds) {
+    ctx.fillStyle = `rgba(255, 255, 255, ${c.alpha})`;
+    ctx.beginPath();
+    ctx.arc(c.x, c.y, 20, 0, Math.PI * 2);
+    ctx.arc(c.x + 25, c.y - 8, 26, 0, Math.PI * 2);
+    ctx.arc(c.x + 55, c.y, 22, 0, Math.PI * 2);
+    ctx.fill();
   }
 
-  // Stars
-  for (const st of game.stars) {
-    ctx.fillStyle = `rgba(255, 255, 255, ${st.alpha})`;
-    ctx.fillRect(st.x, st.y, st.size, st.size);
-  }
-
-  // Skyline
-  for (const b of game.buildings) {
-    ctx.fillStyle = b.color;
-    const by = GROUND_Y - b.height;
-    ctx.fillRect(b.x, by, b.width, b.height);
-    ctx.fillStyle = '#06b6d4';
-    ctx.fillRect(b.x + b.width / 2 - 1, by - 6, 2, 6);
-
-    let winIdx = 0;
-    const rows = Math.floor(b.height / 20);
-    const cols = Math.floor(b.width / 15);
-    for (let r = 0; r < rows; r++) {
-      for (let c = 0; c < cols; c++) {
-        if (b.windows[winIdx % b.windows.length]) {
-          ctx.fillStyle = 'rgba(250, 204, 21, 0.45)';
-          ctx.fillRect(b.x + 4 + c * 14, by + 12 + r * 18, 6, 8);
-        }
-        winIdx++;
-      }
-    }
+  // Candy Hills
+  for (const h of game.hills) {
+    ctx.fillStyle = h.color;
+    ctx.beginPath();
+    ctx.ellipse(h.x + h.width / 2, GROUND_Y, h.width / 2, h.height, 0, Math.PI, 0);
+    ctx.fill();
   }
 
   // Speed Lines
   for (const sl of game.speedLines) {
-    ctx.strokeStyle = `rgba(56, 189, 248, ${sl.alpha})`;
-    ctx.lineWidth = 1.5;
+    ctx.strokeStyle = `rgba(254, 240, 138, ${sl.alpha})`;
+    ctx.lineWidth = 1.8;
     ctx.beginPath();
     ctx.moveTo(sl.x, sl.y);
     ctx.lineTo(sl.x + sl.length, sl.y);
     ctx.stroke();
   }
 
-  // Ground Track
+  // Cookie Land Floor (Chocolate Wafer & Candy Road)
   const groundGrad = ctx.createLinearGradient(0, GROUND_Y, 0, V_HEIGHT);
-  groundGrad.addColorStop(0, '#0f172a');
-  groundGrad.addColorStop(1, '#020617');
+  groundGrad.addColorStop(0, '#451a03'); // rich baked chocolate wafer crust
+  groundGrad.addColorStop(1, '#1c0901');
   ctx.fillStyle = groundGrad;
   ctx.fillRect(0, GROUND_Y, V_WIDTH, V_HEIGHT - GROUND_Y);
 
-  ctx.strokeStyle = '#06b6d4';
-  ctx.lineWidth = 3;
-  ctx.shadowColor = '#06b6d4';
-  ctx.shadowBlur = 12;
+  // Candy Icing Horizon Line (White sugar piping)
+  ctx.strokeStyle = '#ffffff';
+  ctx.lineWidth = 4;
+  ctx.shadowColor = '#f472b6';
+  ctx.shadowBlur = 10;
   ctx.beginPath();
   ctx.moveTo(0, GROUND_Y);
   ctx.lineTo(V_WIDTH, GROUND_Y);
   ctx.stroke();
   ctx.shadowBlur = 0;
 
-  ctx.strokeStyle = 'rgba(6, 182, 212, 0.22)';
-  ctx.lineWidth = 1.5;
+  // Wafer grid lines on road
+  ctx.strokeStyle = 'rgba(253, 224, 71, 0.2)';
+  ctx.lineWidth = 2;
   for (let gx = -40 + game.groundGridOffset; gx < V_WIDTH + 60; gx += 40) {
     ctx.beginPath();
     ctx.moveTo(gx, GROUND_Y);
@@ -1196,15 +1362,13 @@ function gameLoop(currentTime) {
     ctx.stroke();
   }
 
-  ctx.strokeStyle = 'rgba(147, 51, 234, 0.18)';
-  ctx.beginPath();
-  ctx.moveTo(0, GROUND_Y + 30);
-  ctx.lineTo(V_WIDTH, GROUND_Y + 30);
-  ctx.moveTo(0, GROUND_Y + 65);
-  ctx.lineTo(V_WIDTH, GROUND_Y + 65);
-  ctx.stroke();
+  // Road Candy Sprinkles
+  ctx.fillStyle = '#f43f5e';
+  ctx.fillRect(100, GROUND_Y + 25, 6, 3);
+  ctx.fillRect(320, GROUND_Y + 40, 6, 3);
+  ctx.fillRect(680, GROUND_Y + 20, 6, 3);
 
-  // Coins
+  // 7. Golden Cookie Coins
   for (const coin of game.coinsList) {
     if (coin.collected) continue;
     const bobY = coin.y + Math.sin(currentTime * 0.006 + coin.animOffset) * 4;
@@ -1232,7 +1396,7 @@ function gameLoop(currentTime) {
     ctx.restore();
   }
 
-  // Power-Up Orbs
+  // 8. Power-Up Jelly Orbs
   const puColors = {
     shield: { outer: '#0284c7', inner: '#38bdf8', glow: '#38bdf8' },
     magnet: { outer: '#7e22ce', inner: '#c084fc', glow: '#c084fc' },
@@ -1258,7 +1422,7 @@ function gameLoop(currentTime) {
     ctx.fill();
     ctx.shadowBlur = 0;
     ctx.fillStyle = '#ffffff';
-    ctx.font = 'bold 11px sans-serif';
+    ctx.font = 'bold 12px sans-serif';
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
     const sym = pu.type === 'shield' ? '🛡️' : pu.type === 'magnet' ? '🧲' : pu.type === 'boost' ? '⚡' : '2X';
@@ -1266,12 +1430,13 @@ function gameLoop(currentTime) {
     ctx.restore();
   }
 
-  // Obstacles
+  // 9. Obstacles (Candy Cane Spikes, Overhead Flying Laser Forks, Chocolate Pillars)
   for (const obs of game.obstacles) {
     ctx.save();
     if (obs.type === 'low_barrier') {
+      // Candy cane spike hurdle
       ctx.shadowColor = '#ef4444';
-      ctx.shadowBlur = 12;
+      ctx.shadowBlur = 10;
       ctx.fillStyle = '#dc2626';
       ctx.beginPath();
       ctx.moveTo(obs.x, obs.y + obs.height);
@@ -1279,45 +1444,46 @@ function gameLoop(currentTime) {
       ctx.lineTo(obs.x + obs.width, obs.y + obs.height);
       ctx.closePath();
       ctx.fill();
-      ctx.fillStyle = '#fee2e2';
+
+      // Candy white swirl stripes
+      ctx.fillStyle = '#ffffff';
       ctx.beginPath();
       ctx.moveTo(obs.x + 8, obs.y + obs.height);
       ctx.lineTo(obs.x + obs.width / 2, obs.y + 10);
       ctx.lineTo(obs.x + obs.width - 8, obs.y + obs.height);
       ctx.closePath();
       ctx.fill();
-      ctx.fillStyle = '#991b1b';
-      ctx.fillRect(obs.x - 4, obs.y + obs.height - 6, obs.width + 8, 6);
     } else if (obs.type === 'high_laser') {
+      // Flying overhead laser gate (SLIDE UNDER!)
       const pulse = (Math.sin(obs.pulsePhase || 0) + 1) * 0.5;
       ctx.shadowColor = '#f43f5e';
       ctx.shadowBlur = 14 + pulse * 6;
-      ctx.fillStyle = '#334155';
+      ctx.fillStyle = '#4c0519';
       ctx.fillRect(obs.x, obs.y, obs.width, obs.height);
       ctx.fillStyle = '#f43f5e';
       ctx.fillRect(obs.x + 4, obs.y + 6, obs.width - 8, obs.height - 12);
-      ctx.fillStyle = '#fb7185';
+
+      ctx.fillStyle = '#ffffff';
       ctx.font = 'bold 11px sans-serif';
       ctx.textAlign = 'center';
       ctx.textBaseline = 'middle';
       ctx.fillText('▼ SLIDE ▼', obs.x + obs.width / 2, obs.y + obs.height / 2);
-      ctx.fillStyle = '#38bdf8';
-      ctx.fillRect(obs.x + 8, obs.y - 4, 10, 4);
-      ctx.fillRect(obs.x + obs.width - 18, obs.y - 4, 10, 4);
+
+      ctx.fillStyle = '#fde047';
+      ctx.fillRect(obs.x + 6, obs.y - 3, 8, 3);
+      ctx.fillRect(obs.x + obs.width - 14, obs.y - 3, 8, 3);
     } else if (obs.type === 'tall_pillar') {
+      // Tall wafer energy pillar (double jump)
       ctx.shadowColor = '#a855f7';
       ctx.shadowBlur = 12;
-      ctx.fillStyle = '#1e1b4b';
+      ctx.fillStyle = '#3b0764';
       ctx.fillRect(obs.x, obs.y, obs.width, obs.height);
       ctx.fillStyle = '#c084fc';
-      ctx.fillRect(obs.x + 8, obs.y + 4, obs.width - 16, obs.height - 8);
-      ctx.fillStyle = '#e9d5ff';
-      ctx.fillRect(obs.x + 12, obs.y + 10, obs.width - 24, obs.height - 20);
-      ctx.fillStyle = '#9333ea';
-      ctx.fillRect(obs.x - 3, obs.y, obs.width + 6, 6);
+      ctx.fillRect(obs.x + 6, obs.y + 4, obs.width - 12, obs.height - 8);
+      ctx.fillStyle = '#f3e8ff';
+      ctx.fillRect(obs.x + 10, obs.y + 8, obs.width - 20, obs.height - 16);
     } else if (obs.type === 'double_hurdle') {
-      ctx.shadowColor = '#f97316';
-      ctx.shadowBlur = 10;
+      // Double candy spike
       ctx.fillStyle = '#ea580c';
       ctx.beginPath();
       ctx.moveTo(obs.x, obs.y + obs.height);
@@ -1325,6 +1491,7 @@ function gameLoop(currentTime) {
       ctx.lineTo(obs.x + 36, obs.y + obs.height);
       ctx.closePath();
       ctx.fill();
+
       ctx.beginPath();
       ctx.moveTo(obs.x + 46, obs.y + obs.height);
       ctx.lineTo(obs.x + 64, obs.y);
@@ -1335,7 +1502,7 @@ function gameLoop(currentTime) {
     ctx.restore();
   }
 
-  // Motion Trails
+  // 10. Motion Trails
   const skin = getActiveSkin();
   const p = game.player;
 
@@ -1343,7 +1510,7 @@ function gameLoop(currentTime) {
     const tr = p.trailHistory[t];
     ctx.save();
     ctx.globalAlpha = tr.alpha * (1 - t / p.trailHistory.length) * 0.4;
-    ctx.fillStyle = skin.accentColor;
+    ctx.fillStyle = skin.doughColor;
     if (tr.isSliding) {
       ctx.fillRect(tr.x, tr.y, 56, 28);
     } else {
@@ -1352,99 +1519,42 @@ function gameLoop(currentTime) {
     ctx.restore();
   }
 
-  // Player Character
+  // 11. DRAW COOKIE RUNNER
   const isInvulnerable = game.invincibleTimer > 0;
   const flickerVisible = !isInvulnerable || Math.floor(currentTime * 0.02) % 2 === 0;
 
   if (gameState !== 'GAME_OVER' && flickerVisible) {
-    ctx.save();
-
     const hasShield = game.activePowerUps.some((ap) => ap.type === 'shield');
     const hasBoost = game.activePowerUps.some((ap) => ap.type === 'boost');
 
+    // Shield Bubble
     if (hasShield) {
       ctx.strokeStyle = '#38bdf8';
       ctx.shadowColor = '#38bdf8';
       ctx.shadowBlur = 15;
-      ctx.lineWidth = 2.5;
+      ctx.lineWidth = 3;
       ctx.beginPath();
       ctx.arc(p.x + p.width / 2, p.y + p.height / 2, p.isSliding ? 34 : 45, 0, Math.PI * 2);
       ctx.stroke();
-      ctx.fillStyle = 'rgba(56, 189, 248, 0.14)';
+      ctx.fillStyle = 'rgba(56, 189, 248, 0.15)';
       ctx.fill();
     }
 
+    // Boost Super Aura
     if (hasBoost) {
-      ctx.strokeStyle = '#f59e0b';
-      ctx.shadowColor = '#fbbf24';
+      ctx.strokeStyle = '#fbbf24';
+      ctx.shadowColor = '#f59e0b';
       ctx.shadowBlur = 20;
-      ctx.lineWidth = 3;
+      ctx.lineWidth = 3.5;
       ctx.beginPath();
       ctx.arc(p.x + p.width / 2, p.y + p.height / 2, 48, 0, Math.PI * 2);
       ctx.stroke();
     }
 
-    ctx.shadowColor = skin.color;
-    ctx.shadowBlur = 12;
-
-    if (p.isSliding) {
-      if (p.isGrounded && Math.random() < 0.4) createSlideSparks(p.x, GROUND_Y);
-      ctx.fillStyle = skin.color;
-      ctx.beginPath();
-      ctx.roundRect(p.x, p.y + 4, 58, 22, [6, 14, 6, 6]);
-      ctx.fill();
-      ctx.fillStyle = '#ffffff';
-      ctx.fillRect(p.x + 36, p.y + 8, 14, 6);
-      ctx.fillStyle = skin.accentColor;
-      ctx.fillRect(p.x - 6, p.y + 10, 8, 8);
-    } else {
-      const legSwing = Math.sin(p.legAngle) * 12;
-      ctx.fillStyle = skin.color;
-      ctx.beginPath();
-      ctx.arc(p.x + p.width / 2 + 2, p.y + 12, 12, 0, Math.PI * 2);
-      ctx.fill();
-      ctx.fillStyle = '#ffffff';
-      ctx.fillRect(p.x + p.width / 2 + 3, p.y + 9, 10, 5);
-      ctx.fillStyle = skin.accentColor;
-      ctx.beginPath();
-      ctx.roundRect(p.x + 6, p.y + 22, p.width - 12, 22, 5);
-      ctx.fill();
-      ctx.fillStyle = '#ffffff';
-      ctx.beginPath();
-      ctx.arc(p.x + p.width / 2 + 1, p.y + 32, 4, 0, Math.PI * 2);
-      ctx.fill();
-
-      ctx.strokeStyle = skin.color;
-      ctx.lineWidth = 4;
-      ctx.lineCap = 'round';
-      ctx.beginPath();
-      if (p.isGrounded) {
-        ctx.moveTo(p.x + 12, p.y + 26);
-        ctx.lineTo(p.x + 12 - legSwing * 0.7, p.y + 38);
-      } else {
-        ctx.moveTo(p.x + 12, p.y + 26);
-        ctx.lineTo(p.x + 4, p.y + 16);
-      }
-      ctx.stroke();
-
-      ctx.beginPath();
-      if (p.isGrounded) {
-        ctx.moveTo(p.x + 12, p.y + 44);
-        ctx.lineTo(p.x + 12 + legSwing, p.y + 58);
-        ctx.moveTo(p.x + 24, p.y + 44);
-        ctx.lineTo(p.x + 24 - legSwing, p.y + 58);
-      } else {
-        ctx.moveTo(p.x + 12, p.y + 44);
-        ctx.lineTo(p.x + 8, p.y + 54);
-        ctx.moveTo(p.x + 24, p.y + 44);
-        ctx.lineTo(p.x + 28, p.y + 50);
-      }
-      ctx.stroke();
-    }
-    ctx.restore();
+    drawCookieCharacter(ctx, p, skin, currentTime, p.isGrounded, p.isSliding, p.legAngle);
   }
 
-  // Particles
+  // 12. Particles
   for (const pt of game.particles) {
     ctx.save();
     ctx.globalAlpha = pt.alpha;
@@ -1453,10 +1563,14 @@ function gameLoop(currentTime) {
     ctx.shadowColor = pt.color;
     ctx.shadowBlur = 6;
     if (pt.shape === 'ring') {
-      ctx.lineWidth = 2;
+      ctx.lineWidth = 2.5;
       ctx.beginPath();
       ctx.arc(pt.x, pt.y, pt.size, 0, Math.PI * 2);
       ctx.stroke();
+    } else if (pt.shape === 'crumb') {
+      ctx.beginPath();
+      ctx.arc(pt.x, pt.y, pt.size, 0, Math.PI * 2);
+      ctx.fill();
     } else if (pt.shape === 'spark') {
       ctx.fillRect(pt.x, pt.y, pt.size * 2, pt.size);
     } else {
@@ -1467,7 +1581,7 @@ function gameLoop(currentTime) {
     ctx.restore();
   }
 
-  // Floating Texts
+  // 13. Floating Score / Status Popups
   for (const ft of game.floatingTexts) {
     ctx.save();
     ctx.globalAlpha = Math.max(0, ft.alpha);
@@ -1505,7 +1619,7 @@ window.addEventListener('keydown', (e) => {
   }
 });
 
-// Canvas Touch & Click handling
+// Canvas Click & Touch
 canvas.addEventListener('click', () => {
   if (gameState === 'MENU' || gameState === 'GAME_OVER') {
     startGame();
@@ -1523,7 +1637,7 @@ canvas.addEventListener('touchstart', (e) => {
   touchStartY = t.clientY;
   touchStartX = t.clientX;
   touchStartTime = Date.now();
-});
+}, { passive: true });
 
 canvas.addEventListener('touchend', (e) => {
   if (touchStartY === null) return;
@@ -1555,11 +1669,24 @@ canvas.addEventListener('touchend', (e) => {
   } else {
     handleJump();
   }
-});
+}, { passive: true });
 
-// On-screen buttons
-document.getElementById('btnTouchJump')?.addEventListener('click', handleJump);
-document.getElementById('btnTouchSlide')?.addEventListener('click', handleSlide);
+// Mobile Action Buttons (Slide on Left, Jump on Right)
+const btnTouchJump = document.getElementById('btnTouchJump');
+const btnTouchSlide = document.getElementById('btnTouchSlide');
+
+btnTouchJump?.addEventListener('touchstart', (e) => {
+  e.preventDefault();
+  handleJump();
+});
+btnTouchJump?.addEventListener('click', handleJump);
+
+btnTouchSlide?.addEventListener('touchstart', (e) => {
+  e.preventDefault();
+  handleSlide();
+});
+btnTouchSlide?.addEventListener('click', handleSlide);
+
 document.getElementById('btnPause')?.addEventListener('click', togglePause);
 document.getElementById('btnResume')?.addEventListener('click', togglePause);
 document.getElementById('btnPauseRestart')?.addEventListener('click', startGame);
@@ -1572,7 +1699,7 @@ document.getElementById('btnMute')?.addEventListener('click', () => {
 document.getElementById('btnStartGame')?.addEventListener('click', startGame);
 document.getElementById('btnRestartGame')?.addEventListener('click', startGame);
 
-// Header / Footer Modal triggers
+// Open Modals
 document.querySelectorAll('.btn-open-shop').forEach((el) => {
   el.addEventListener('click', () => {
     sound.playClick();
@@ -1588,67 +1715,21 @@ document.querySelectorAll('.btn-open-howto').forEach((el) => {
   });
 });
 
-document.querySelectorAll('.btn-open-records').forEach((el) => {
-  el.addEventListener('click', () => {
-    sound.playClick();
-    renderRecordsModal();
-    document.getElementById('recordsModal').classList.remove('hidden');
-  });
-});
-
 document.querySelectorAll('.btn-close-modal').forEach((el) => {
   el.addEventListener('click', () => {
     sound.playClick();
     document.getElementById('shopModal').classList.add('hidden');
     document.getElementById('howToPlayModal').classList.add('hidden');
-    document.getElementById('recordsModal').classList.add('hidden');
   });
 });
 
-// Difficulty Selector
-document.querySelectorAll('.btn-diff').forEach((btn) => {
-  btn.addEventListener('click', (e) => {
-    sound.playClick();
-    const diff = e.currentTarget.dataset.diff;
-    currentDifficulty = diff;
-
-    document.querySelectorAll('.btn-diff').forEach((b) => {
-      const active = b.dataset.diff === diff;
-      b.className = `btn-diff px-3 py-1.5 font-semibold rounded-lg transition-colors flex items-center gap-1.5 cursor-pointer whitespace-nowrap ${
-        active
-          ? diff === 'hard'
-            ? 'bg-rose-500/20 text-rose-300 border border-rose-500/40 shadow-sm'
-            : 'bg-cyan-500/20 text-cyan-300 border border-cyan-500/40 shadow-sm'
-          : 'text-slate-400 hover:text-white'
-      }`;
-    });
-
-    updateUIElements();
-  });
-});
-
-// BGM Toggle in Header
-let isMusicActive = false;
-document.getElementById('btnMusicToggle')?.addEventListener('click', () => {
-  isMusicActive = !isMusicActive;
-  if (isMusicActive) {
-    sound.startMusic();
-    document.getElementById('musicStatus').innerText = 'BGM 켜짐';
-    document.getElementById('musicStatus').classList.add('text-cyan-400');
-  } else {
-    sound.stopMusic();
-    document.getElementById('musicStatus').innerText = 'BGM 끄기';
-    document.getElementById('musicStatus').classList.remove('text-cyan-400');
-  }
-});
-
-// Render Shop Content
+// Render Cookie Shop Content (All purchasable with in-game coins)
 function renderShopModal() {
   document.getElementById('shopCoins').innerText = `${playerData.totalCoins} 코인`;
 
-  // Render Skins
   const skinContainer = document.getElementById('shopSkinsContainer');
   skinContainer.innerHTML = '';
+
   SKINS.forEach((skin) => {
     const isUnlocked = playerData.unlockedSkins.includes(skin.id);
     const isEquipped = playerData.activeSkin === skin.id;
@@ -1657,35 +1738,38 @@ function renderShopModal() {
     const card = document.createElement('div');
     card.className = `p-3.5 rounded-xl border transition-all ${
       isEquipped
-        ? 'bg-slate-800/80 border-cyan-500/60 shadow-md shadow-cyan-950/30'
-        : 'bg-slate-850/50 border-slate-800 hover:border-slate-700'
+        ? 'bg-amber-950/40 border-amber-500 shadow-md shadow-amber-950/30'
+        : 'bg-slate-850/60 border-slate-800 hover:border-slate-700'
     }`;
 
     let actionBtnHtml = '';
     if (isEquipped) {
-      actionBtnHtml = `<span class="text-xs font-bold text-cyan-400 flex items-center gap-1">✓ 장착 중</span>`;
+      actionBtnHtml = `<span class="text-xs font-bold text-amber-400 flex items-center gap-1">✓ 선택됨</span>`;
     } else if (isUnlocked) {
-      actionBtnHtml = `<button data-id="${skin.id}" class="btn-select-skin px-3 py-1.5 bg-slate-800 hover:bg-cyan-500 hover:text-slate-950 text-xs font-semibold text-white rounded-lg transition-colors cursor-pointer">선택하기</button>`;
+      actionBtnHtml = `<button data-id="${skin.id}" class="btn-select-skin px-3 py-1.5 bg-slate-800 hover:bg-amber-500 hover:text-slate-950 text-xs font-semibold text-white rounded-lg transition-colors cursor-pointer">선택하기</button>`;
     } else {
       actionBtnHtml = `<button data-id="${skin.id}" ${canAfford ? '' : 'disabled'} class="btn-buy-skin px-3 py-1.5 text-xs font-semibold rounded-lg flex items-center gap-1.5 transition-colors ${
         canAfford
           ? 'bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold cursor-pointer'
           : 'bg-slate-800 text-slate-500 cursor-not-allowed'
-      }">🔒 🪙 ${skin.cost} 코인</button>`;
+      }">🔒 🪙 ${skin.cost} 코인으로 구매</button>`;
     }
 
     card.innerHTML = `
       <div class="flex items-start justify-between mb-2">
         <div class="flex items-center gap-2.5">
-          <div class="w-8 h-8 rounded-lg flex items-center justify-center font-bold text-slate-950 text-xs shadow-inner" style="background-color: ${skin.color}">⚡</div>
+          <div class="w-9 h-9 rounded-full flex items-center justify-center font-bold text-white text-base shadow-md border-2 border-white/20" style="background-color: ${skin.doughColor}">
+            🍪
+          </div>
           <div>
             <div class="font-bold text-sm text-white">${skin.name}</div>
-            <div class="text-[11px] text-cyan-400 font-medium">${skin.perk}</div>
+            <div class="text-[11px] text-amber-400 font-medium">${skin.perk}</div>
           </div>
         </div>
       </div>
       <p class="text-xs text-slate-400 mb-3">${skin.desc}</p>
       <div class="flex items-center justify-between pt-2 border-t border-slate-800/60">
+        <span class="text-xs font-mono text-slate-400">${skin.cost > 0 ? `가격: 🪙 ${skin.cost}` : '기본 지급'}</span>
         ${actionBtnHtml}
       </div>
     `;
@@ -1720,9 +1804,9 @@ function renderShopModal() {
   });
 
   // Render Upgrades
-  renderUpgradeItem('magnetDuration', '자석 지속 시간', '자석 아이템의 흡입 지속 시간을 +2초씩 연장합니다.', '🧲');
-  renderUpgradeItem('shieldDuration', '보호막 무적 시간', '보호막 파괴 후 주어지는 무적 회피 시간을 증가시킵니다.', '🛡️');
-  renderUpgradeItem('coinValue', '코인 가치 증폭', '획득하는 코인 가치를 영구적으로 +15% 증가시킵니다.', '🪙');
+  renderUpgradeItem('magnetDuration', '자석 젤리 지속 시간', '자석 아이템의 코인 흡입 시간을 +2초씩 연장합니다.', '🧲');
+  renderUpgradeItem('shieldDuration', '설탕 보호막 무적 시간', '보호막 파괴 후 주어지는 무적 회피 시간을 증가시킵니다.', '🛡️');
+  renderUpgradeItem('coinValue', '황금 코인 가치 증폭', '획득하는 코인 가치를 영구적으로 +15% 증가시킵니다.', '🪙');
 }
 
 function renderUpgradeItem(type, title, desc, icon) {
@@ -1737,22 +1821,22 @@ function renderUpgradeItem(type, title, desc, icon) {
   if (cost === null) {
     btnHtml = `<span class="text-xs font-bold text-emerald-400">최대 레벨</span>`;
   } else {
-    btnHtml = `<button class="btn-do-upgrade px-3.5 py-1.5 text-xs font-semibold rounded-lg flex items-center gap-1.5 transition-colors ${
+    btnHtml = `<button class="btn-do-upgrade px-3 py-1.5 text-xs font-semibold rounded-lg flex items-center gap-1.5 transition-colors ${
       canAfford
-        ? 'bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold cursor-pointer'
+        ? 'bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold cursor-pointer'
         : 'bg-slate-800 text-slate-500 cursor-not-allowed'
     }" ${canAfford ? '' : 'disabled'}>강화 (🪙 ${cost})</button>`;
   }
 
   container.innerHTML = `
-    <div class="flex items-center gap-3">
-      <div class="w-10 h-10 rounded-xl bg-slate-800 border border-slate-700 flex items-center justify-center text-lg">${icon}</div>
+    <div class="flex items-center gap-2.5">
+      <div class="w-8 h-8 rounded-lg bg-slate-800 border border-slate-700 flex items-center justify-center text-sm">${icon}</div>
       <div>
-        <div class="font-bold text-sm text-white flex items-center gap-2">
+        <div class="font-bold text-xs text-white flex items-center gap-1.5">
           <span>${title}</span>
-          <span class="text-xs font-mono text-cyan-400">Lv.${currentLvl}/5</span>
+          <span class="text-[11px] font-mono text-amber-400">Lv.${currentLvl}/5</span>
         </div>
-        <div class="text-xs text-slate-400">${desc}</div>
+        <div class="text-[11px] text-slate-400">${desc}</div>
       </div>
     </div>
     <div>${btnHtml}</div>
@@ -1769,54 +1853,6 @@ function renderUpgradeItem(type, title, desc, icon) {
       updateUIElements();
     });
   }
-}
-
-// Render Records Modal
-function renderRecordsModal() {
-  document.getElementById('recEasy').innerText = (playerData.highScores.easy || 0).toLocaleString();
-  document.getElementById('recNormal').innerText = (playerData.highScores.normal || 0).toLocaleString();
-  document.getElementById('recHard').innerText = (playerData.highScores.hard || 0).toLocaleString();
-
-  document.getElementById('recTotalDist').innerText = `${totalDistance.toLocaleString()}m`;
-  document.getElementById('recTotalCoins').innerText = playerData.totalCoins.toLocaleString();
-
-  const achievements = [
-    { title: '첫 출발', desc: '달리기 1회 완주하기', done: totalRuns >= 1 },
-    { title: '스피드 러너', desc: '단일 런에서 500m 이상 돌파하기', done: Math.max(...Object.values(playerData.highScores)) >= 5000 },
-    { title: '코인 부자', desc: '누적 코인 100개 이상 수집하기', done: playerData.totalCoins >= 100 },
-    { title: '캐릭터 수집가', desc: '러너 스킨 2종 이상 보유하기', done: playerData.unlockedSkins.length >= 2 },
-    { title: '매운맛 정복자', desc: '매운맛 난이도에서 10,000점 이상 달성', done: (playerData.highScores.hard || 0) >= 10000 },
-  ];
-
-  const achContainer = document.getElementById('achievementsList');
-  achContainer.innerHTML = '';
-  achievements.forEach((ach) => {
-    const item = document.createElement('div');
-    item.className = `p-3 rounded-xl border flex items-center justify-between transition-colors ${
-      ach.done
-        ? 'bg-amber-950/20 border-amber-500/30 text-amber-200'
-        : 'bg-slate-850/40 border-slate-800/80 text-slate-400'
-    }`;
-    item.innerHTML = `
-      <div class="flex items-center gap-3">
-        <div class="w-7 h-7 rounded-lg flex items-center justify-center ${
-          ach.done ? 'bg-amber-500/20 text-amber-400' : 'bg-slate-800 text-slate-600'
-        }">🏆</div>
-        <div>
-          <div class="text-xs font-bold ${ach.done ? 'text-white' : 'text-slate-300'}">${ach.title}</div>
-          <div class="text-[11px] text-slate-400">${ach.desc}</div>
-        </div>
-      </div>
-      <div>
-        ${
-          ach.done
-            ? '<span class="text-[11px] font-bold text-amber-400 px-2 py-0.5 bg-amber-500/10 rounded">달성 완료</span>'
-            : '<span class="text-[11px] text-slate-500">진행 중</span>'
-        }
-      </div>
-    `;
-    achContainer.appendChild(item);
-  });
 }
 
 // Initial UI sync
